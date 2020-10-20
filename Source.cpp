@@ -30,7 +30,7 @@ const ll LINF = 1ll << 62;
 const int MAXN = 1050;
 
 double F(double x) {
-	return 1 - 0.5*x*x*log(x) - 0.3*sqrt(x);
+	return 1 - 0.5*x*x*log(x) + 0.3*sqrt(x);
 	//return 2 * x*x - x * x*x - exp(x);
 }
 double GetAns(double(*f)(double), double a, double b, double eps) {
