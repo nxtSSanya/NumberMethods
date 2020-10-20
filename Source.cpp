@@ -22,33 +22,58 @@
 #define ull unsigned long long
 #define endl "\n"
 #define rt(x) return(x)
-using namespace std;	
+//#define _DEBUG
+using namespace std;
 map <int, long long> inversions;
 vector<int> Si;
 const int INF = 1 << 30;
-const ll LINF = 1ll << 62;	
+const ll LINF = 1ll << 62;
 const int MAXN = 1050;
 
 double F(double x) {
 	return 1 - 0.5*x*x*log(x) + 0.3*sqrt(x);
-	//return 2 * x*x - x * x*x - exp(x);
 }
-double GetAns(double(*f)(double), double a, double b, double eps) {
+double GetAns(double(*f)(double), double a, double b, double eps, int accuracy) {
 	double c;
 	int it = 0;
+	vector<long double> cn;
+	double pred;
 	while (1) {
+		pred = a;
 		c = a - f(a)*(b-a) / (f(b)-f(a));
 		if ((f(a)*f(c)) < 0) b = c;
 		else a = c;
-		cout << "Iteration: " << it << "|\t";
-		cout << "Xn: " << c << "\t";
-		cout << "f(Xn): " << f(c) << "\t";
-		cout << "|Xn - Xn-1|: " << abs(f(b) - f(a)) << endl;
+		cn.push_back(c);
+		cout.precision(accuracy);
+		cout << fixed << "Iteration: " << it << "|\t";
+		cout << fixed << "Xn: " << c << "\t";
+		cout << fixed << "f(Xn): " << f(c) << "\t";
+		if(it != 0)
+		cout << fixed << "|Xn - Xn-1|: " << abs(c-pred) << endl;
 		cout << endl;
 		it++;
-		if (f(c) < eps) break;
+		if (abs(c-pred) <= eps) break;
 	}
+#ifndef _DEBUG
+	for (int i = 0; i < cn.size() - 1; ++i) {
+		cout <<"RAZNOST X: " << abs(cn[i] - cn[i + 1]) << " ";
+	}
+#endif
 	return c;
+}
+int GetNumbersAfterDot(long double eps) {
+	string s = to_string(eps);
+	string res;
+	int ind = 0;
+	for (int i = 0; i < s.size(); ++i) {
+		if (s[i] == '.') {
+			ind = i;
+		}
+	}
+	for (int i = ind + 1; i < s.size(); ++i) {
+		res += s[ind];
+	}
+	return res.size();
 }
 
 int main()
@@ -56,7 +81,6 @@ int main()
 	//#ifndef ONLINE_JUDGE	
 	//	freopen("input.txt", "r", stdin); freope	n("output.txt", "w", stdout);
 	//#endif
-	//vector<ll> st(57);
 	ios::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 	double a, b, epsilon, x;
 	cout << "Interval: ";
@@ -67,7 +91,6 @@ int main()
 	}
 	cout << "error: ";
 	cin >> epsilon;
-	cout << GetAns(F, a, b, epsilon);
+	cout << GetAns(F, a, b, epsilon, GetNumbersAfterDot(epsilon));
 	return 0;
 }
-//c - (f(c)/(f(a) - f(c))*(a-c)
