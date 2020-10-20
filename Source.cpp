@@ -36,17 +36,17 @@ double F(double x) {
 double GetAns(double(*f)(double), double a, double b, double eps) {
 	double c;
 	int it = 0;
-	while (abs(f(b) - f(a)) > eps) {
-		c = a + (f(b)*(b - a)) / (f(b) - f(a));
-		if ((f(a)*f(c)) < 0) b = c;//Teorema Bolcano-Koshi
-		else if (f(c)*f(b) < 0) a = c;//Teorema Bolcano-Koshi
-		else rt(c);
-		cout << "Iteration: " << it <<"|\t";
+	while (1) {
+		c = a - f(a)*(b-a) / (f(b)-f(a));
+		if ((f(a)*f(c)) < 0) b = c;
+		else a = c;
+		cout << "Iteration: " << it << "|\t";
 		cout << "Xn: " << c << "\t";
 		cout << "f(Xn): " << f(c) << "\t";
-		cout <<"|Xn - Xn-1|: " << abs(f(b) - f(a)) << endl;
+		cout << "|Xn - Xn-1|: " << abs(f(b) - f(a)) << endl;
 		cout << endl;
 		it++;
+		if (f(c) < eps) break;
 	}
 	return c;
 }
