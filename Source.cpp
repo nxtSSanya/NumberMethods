@@ -33,33 +33,35 @@ const int MAXN = 1050;
 double F(double x) {
 	return 1 - 0.5*x*x*log(x) + 0.3*sqrt(x);
 }
-double GetAns(double(*f)(double), double a, double b, double eps, int accuracy) {
+void GetAns(double(*f)(double), double a, double b, double eps, int accuracy) {
 	double c;
 	int it = 0;
 	vector<long double> cn;
 	double pred;
 	while (1) {
 		pred = a;
-		c = a - f(a)*(b-a) / (f(b)-f(a));
+		c = a - f(a)*(b - a) / (f(b) - f(a));
 		if ((f(a)*f(c)) < 0) b = c;
 		else a = c;
 		cn.push_back(c);
 		cout.precision(accuracy);
+		if (abs(c - pred) <= eps) break;
 		cout << fixed << "Iteration: " << it << "|\t";
 		cout << fixed << "Xn: " << c << "\t";
 		cout << fixed << "f(Xn): " << f(c) << "\t";
-		if(it != 0)
-		cout << fixed << "|Xn - Xn-1|: " << abs(c-pred) << endl;
+		if (it != 0)
+			cout << fixed << "|Xn - Xn-1|: " << abs(c - pred) << endl;
 		cout << endl;
 		it++;
-		if (abs(c-pred) <= eps) break;
+		
 	}
-#ifndef _DEBUG
+#ifdef _DEBUG
 	for (int i = 0; i < cn.size() - 1; ++i) {
-		cout <<"RAZNOST X: " << abs(cn[i] - cn[i + 1]) << " ";
+		cout << "RAZNOST X: " << abs(cn[i] - cn[i + 1]) << " ";
+		cout <<"10^-6: " <<  1e-6 << endl;
 	}
 #endif
-	return c;
+	//return c;
 }
 int GetNumbersAfterDot(long double eps) {
 	string s = to_string(eps);
@@ -91,6 +93,6 @@ int main()
 	}
 	cout << "error: ";
 	cin >> epsilon;
-	cout << GetAns(F, a, b, epsilon, GetNumbersAfterDot(epsilon));
+	GetAns(F, a, b, epsilon, GetNumbersAfterDot(epsilon));
 	return 0;
 }
